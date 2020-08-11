@@ -1,0 +1,44 @@
+mkdir data #crear el directorio para almacenar los datos 
+
+curl https://datosabiertos.jcyl.es/web/jcyl/risp/es/ciencia-tecnologia/general/1284166186527.csv > data/CataDatosRaw.csv
+#descargar los datos mediante la url
+
+iconv -f ISO-8859-15 -t UTF-8 data/CataDatosRaw.csv>data/CataDatosJCyL.csv
+#cambiar la codificacion de los datos
+
+sed -f ecsv2csv data/CataDatosJCyL.csv > data/CataDatosCSV.csv  
+#ejecutamos ecsv2csv que elimina la primera linea y elimina los saltos de linea
+#excepto en los cambios de campos
+
+awk -f campos data/CataDatosCSV.csv | sed -n '1,15p' > data/CataDatosCSV.campos
+#asi obtenemos en el fichero CataDatosCSV.campos los 15 registros
+
+awk -f campos2num2 -v x='ultima.*' data/CataDatosCSV.campos
+#programa awk para realizar el apartado 1.5, pero el programa bash se
+#encuentra en el fichero campos2num
+
+
+./campos2num 'Títu.*'
+./campos2num '.*Crea.*'
+#estos comandos realizan el ejercicio 1.5
+
+nURL=$(./campos2num 'Enlace al.*')
+#en nURL almacenamos el numero de campo, en este caso el que contiene las URL
+awk -f listado -v x=$nURL ereg='.*datosabiertos.*' data/CataDatosCSV.csv | sed -f convfecha > data/Figura3
+#Estos comandos consiguen la misma salida que la mostrada en la figura 3 que se
+#almacenara en data/Figura3 
+#Se hace esto solo con el proposito de mostrar 
+#que se ha conseguido el objetivo del ejercicio.
+
+
+#las siguientes ordenes son para conseguir los distintos listados
+sector=$(./campos2num 'Sector')
+awk -f listado -v x=$sector data/CataDatosCSV.csv |sed -f convfecha > data/CataListSectores.list
+
+url=$(./campos2num 'Enlace al.*')
+awk -f listado -v x=$url data/CataDatosCSV.csv |sed -f convfecha > data/CataListURLs.list
+
+sector=$(./campos2num 'Sector')
+awk -f listado -v x=$sector ereg='salud' data/CataDatosCSV.csv |sed -f convfecha > data/CataListSectorSalud.list
+
+

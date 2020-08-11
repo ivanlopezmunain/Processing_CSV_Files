@@ -1,0 +1,14 @@
+#!/user/bin/awk -f
+
+BEGIN{
+	FS=";";
+}
+#saltar la primera linea
+NR==1{next;}
+#mirar las coincidencias que haya en el campo numero x con la expresion regular
+#despues imprimir el campo 1: el 14 y en la siguiente linea el campo x 
+#condicionado por la expresion regular ereg
+$x~ereg{print $1 ": (" $14 ")\n";
+ print "\t \t" $x;
+}
+

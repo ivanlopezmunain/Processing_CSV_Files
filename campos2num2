@@ -1,0 +1,7 @@
+#!/user/bin/awk -f
+
+BEGIN{
+	FS=":";
+	}
+
+$2~x{print "El número del registro que hay coincidencia es: " $1;}

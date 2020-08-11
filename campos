@@ -1,0 +1,10 @@
+#!/usr/bin/awk -f
+#separador de campos ;
+BEGIN {FS=";";}
+
+#para la linea 1 imprimimos el nombre de cada columna
+NR==1{	
+	for(ncampo=1;ncampo<=NF;ncampo++){
+		print ncampo " : " $ncampo;
+	}
+}

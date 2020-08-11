@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#expresion regular, se esta diciendo que puede ser cualquier letra
+#mayuscula o minuscula repetida varias veces pero no puede contener
+#nigun slash (/) porque asi lo diferenciamos de que  sea una ruta
+expresion='^/[a-zA-Z ]*$'
+
+#sino se especifica una expresion regular se devuelve menos uno
+
+if [[  $1  =~ $expresion ]]; then
+	echo -1
+	exit 1
+fi
+
+#si hay 2 entradas-> expresion, ruta
+#datos por defecto-> data/CataDatosCSV.campos
+
+if [ $# -eq 2 ]; then
+	dataset=$2
+else
+	dataset=data/CataDatosCSV.campos
+fi
+
+
+#encontrar igualdades con la expresion regular y quedarnos solo con el primer
+#campo, -f1 seleccionamos el primer campo y -d ":" decir cual es el delimitador
+
+numRegistro=$(egrep "$1" $dataset | cut -f1 -d ":")
+
+#sino hay coincidencias se devuelve cero
+if [[ $numRegistro = "" ]]; then
+	numRegistro=0
+fi
+
+echo $numRegistro
+
+
+
+
+

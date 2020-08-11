@@ -1,0 +1,4 @@
+#borrar la primera linea
+1d
+#explicado en readme.pdf
+:a;N;$!ba;s/[^;]\n//g
